@@ -1,0 +1,42 @@
+name: NPM publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      increment:
+        description: 'Version increment (patch, minor, major, etc.)'
+        required: true
+        default: 'patch'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out
+        uses: actions/checkout@v2
+
+      - name: Caching dependencies
+        uses: actions/cache@v1
+        with:
+          path: '~/.yarn'
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+
+      - name: Installing dependencies
+        run: yarn
+
+      - name: Pre Publishing
+        run: |
+          git config --global user.name 'your_git_username'
+          git config --global user.email 'your_git_email'
+          npm version ${{ github.event.inputs.increment }}
+
+      - name: Publishing
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+
+      - name: Post Publishing
+        run: |
+          git push
+          git push --tags
