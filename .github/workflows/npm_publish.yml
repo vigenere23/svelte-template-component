@@ -26,9 +26,10 @@ jobs:
         run: yarn
 
       - name: Pre Publishing
+        # TODO fill missing __GIT_USERNAME__ and __GIT_EMAIL__
         run: |
-          git config --global user.name 'your_git_username'
-          git config --global user.email 'your_git_email'
+          git config --global user.name '__GIT_USERNAME__'
+          git config --global user.email '__GIT_EMAIL__'
           npm version ${{ github.event.inputs.increment }}
 
       - name: Publishing
