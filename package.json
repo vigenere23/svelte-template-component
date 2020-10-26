@@ -1,5 +1,5 @@
 {
-  "name": "svelte-component-template",
+  "name": "svelte-template-component",
   "svelte": "src/components/index.ts",
   "module": "dist/index.mjs",
   "main": "dist/index.js",
