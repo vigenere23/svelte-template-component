@@ -1,4 +1,4 @@
-# svelte-component-template
+# svelte-template-component
 
 A better and more complete version of the official [sveltejs/component-template](https://github.com/sveltejs/component-template).
 
