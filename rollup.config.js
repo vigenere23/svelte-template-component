@@ -22,8 +22,19 @@ export default {
     { file: pkg.main, format: 'umd', name }
   ],
   plugins: [
-    // Ensures removed files are removed from compiled files
-    del({ targets: ['dist/*', 'lib/*'] }),
+    // Ensures freshness of compiled files
+    del({ targets: ['dist', 'lib'] }),
+    // Creates an index.d.ts for svelte components
+    {
+      name: 'root types',
+      generateBundle() {
+        this.emitFile({
+          fileName: 'index.d.ts',
+          type: 'asset',
+          source: "export * from '../src/components'\n"
+        })
+      }
+    },
     svelte({
       preprocess: autoPreprocess({
         postcss: {
@@ -37,8 +48,6 @@ export default {
     resolve(),
     // Builds the external .ts files
     execute('tsc -p src/lib'),
-    // Creates an index.d.ts for svelte components
-    execute(`echo "export * from '../src/components'" > dist/index.d.ts`),
     // Shows compiled bundles sizes (not for /lib)
     sizes()
   ]
